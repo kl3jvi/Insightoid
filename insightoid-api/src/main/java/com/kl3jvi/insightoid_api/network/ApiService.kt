@@ -7,5 +7,7 @@ import retrofit2.http.POST
 
 interface ApiService {
     @POST("/crash")
-    suspend fun sendCrashData(@Body crashData: CrashData): Response<Unit>
+    suspend fun sendCrashData(
+        @Body crashData: CrashData,
+    ): Response<Unit>
 }

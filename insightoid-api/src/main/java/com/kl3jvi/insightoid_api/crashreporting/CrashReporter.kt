@@ -5,12 +5,16 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kl3jvi.insightoid_api.network.NetworkUtils
 import com.kl3jvi.insightoid_api.storage.LocalStorage
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class CrashReporter(appContext: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(appContext, workerParams) {
+class CrashReporter(
+    appContext: Context,
+    workerParams: WorkerParameters,
+) : CoroutineWorker(appContext, workerParams), KoinComponent {
+    private val localStorage: LocalStorage by inject()
 
     override suspend fun doWork(): Result {
-        val localStorage = LocalStorage(applicationContext)
         val crashDataList = localStorage.getCrashData()
 
         if (NetworkUtils.isNetworkAvailable(applicationContext) && crashDataList.isNotEmpty()) {
@@ -28,8 +32,6 @@ class CrashReporter(appContext: Context, workerParams: WorkerParameters) :
     }
 
     private suspend fun sendCrashDataToServer(crashData: CrashData): Boolean {
-        // Implement your logic to send crash data to the server
-        // Return true if the data is sent successfully, false otherwise
         return true
     }
 }

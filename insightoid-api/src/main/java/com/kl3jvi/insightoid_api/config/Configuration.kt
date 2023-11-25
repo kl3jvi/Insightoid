@@ -6,5 +6,5 @@ package com.kl3jvi.insightoid_api.config
 data class Configuration(
     val apiKey: String,
     val enableLogging: Boolean = false,
-    val enableCrashReporting: Boolean = false
+    val enableCrashReporting: Boolean = false,
 )

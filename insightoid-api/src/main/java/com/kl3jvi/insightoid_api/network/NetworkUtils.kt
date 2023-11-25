@@ -16,7 +16,8 @@ class NetworkUtils {
 
             val networkRequest = NetworkRequest.Builder().build()
 
-            connectivityManager.registerNetworkCallback(networkRequest,
+            connectivityManager.registerNetworkCallback(
+                networkRequest,
                 object : ConnectivityManager.NetworkCallback() {
                     override fun onAvailable(network: Network) {
                         isNetworkConnected = true
@@ -25,7 +26,8 @@ class NetworkUtils {
                     override fun onLost(network: Network) {
                         isNetworkConnected = false
                     }
-                })
+                },
+            )
 
             return isNetworkConnected
         }

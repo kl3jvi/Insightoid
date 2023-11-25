@@ -17,17 +17,20 @@ import java.io.StringWriter
 internal class ExceptionHandler(
     private val context: Context,
 ) : Thread.UncaughtExceptionHandler, KoinComponent {
-
     private val localStorage: LocalStorage by inject()
     private val apiClient: ApiClient by inject()
     private val scope = CoroutineScope(Dispatchers.IO)
-    private val errorHandler = CoroutineExceptionHandler { _, throwable ->
-        Logger.e("Error while sending crash data:", "${throwable.message}")
-    }
+    private val errorHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            Logger.e("Error while sending crash data:", "${throwable.message}")
+        }
 
     private val defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
 
-    override fun uncaughtException(thread: Thread, exception: Throwable) {
+    override fun uncaughtException(
+        thread: Thread,
+        exception: Throwable,
+    ) {
         try {
             val crashData = collectCrashData(thread, exception)
             localStorage.storeCrashData(crashData)
@@ -45,7 +48,7 @@ internal class ExceptionHandler(
 
     private fun collectCrashData(
         thread: Thread,
-        exception: Throwable
+        exception: Throwable,
     ): CrashData {
         val stringWriter = StringWriter()
         exception.printStackTrace(PrintWriter(stringWriter))
@@ -56,7 +59,7 @@ internal class ExceptionHandler(
             threadId = thread.id,
             exceptionName = exception.javaClass.name,
             exceptionMessage = exception.message,
-            stackTrace = stackTrace
+            stackTrace = stackTrace,
         )
     }
 }

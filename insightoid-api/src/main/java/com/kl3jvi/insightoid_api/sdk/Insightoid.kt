@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit
  * It provides the main entry point for the SDK functionality.
  */
 object Insightoid {
-
     private val koinApplication = KoinApplication.init()
 
     /**
@@ -26,7 +25,7 @@ object Insightoid {
     fun initialize(
         context: Context,
         apiKey: String,
-        configuration: Configuration? = null
+        configuration: Configuration? = null,
     ) {
         Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(context))
         koinApplication.modules(listOf())
@@ -34,15 +33,16 @@ object Insightoid {
     }
 
     private fun initializeSendCrashData(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+        val constraints =
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
 
         val sendCrashDataWorkRequest =
             PeriodicWorkRequest.Builder(
                 CrashReporter::class.java,
                 15,
-                TimeUnit.MINUTES
+                TimeUnit.MINUTES,
             ).setConstraints(constraints).build()
 
         WorkManager.getInstance(context).enqueue(sendCrashDataWorkRequest)
@@ -51,5 +51,4 @@ object Insightoid {
     /**
      * This class holds the configuration options for the Insightoid SDK.
      */
-
 }
