@@ -24,7 +24,7 @@ object Insightoid {
      */
     fun initialize(
         context: Context,
-        apiKey: String,
+        apiKey: String = "",
         configuration: Configuration? = null,
     ) {
         Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(context))

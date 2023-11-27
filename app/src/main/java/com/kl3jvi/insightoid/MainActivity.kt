@@ -26,8 +26,11 @@ class MainActivity : ComponentActivity() {
         // and the crash data will be sent to the server
         lifecycleScope.launch {
             delay(3000)
-            throw RuntimeException("Test Crash")
+//            throw RuntimeException("Test Crash")
         }
+
+        val a = 1
+        println(1 / 0)
 
         setContent {
             InsightoidTheme {

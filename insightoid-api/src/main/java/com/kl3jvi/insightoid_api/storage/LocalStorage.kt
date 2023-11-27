@@ -1,11 +1,12 @@
 package com.kl3jvi.insightoid_api.storage
 
-import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.kl3jvi.insightoid_api.crashreporting.CrashData
 
-class LocalStorage(context: Context) {
-    private val sharedPreferences = context.getSharedPreferences("CrashData", Context.MODE_PRIVATE)
+class LocalStorage(
+    private val sharedPreferences: SharedPreferences
+) {
     private val gson = Gson()
 
     fun storeCrashData(crashData: CrashData) {
