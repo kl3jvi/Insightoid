@@ -1,61 +1,57 @@
 package com.kl3jvi.insightoid_api.utils
 
 import android.util.Log
+import com.kl3jvi.insightoid_api.sdk.Insightoid
 
-object Logger {
-    enum class LogLevel {
-        DEBUG,
-        INFO,
-        WARN,
-        ERROR,
-        NONE,
-    }
 
-    var logLevel: LogLevel = LogLevel.NONE
+@Suppress("PropertyName")
+interface LogTagProvider {
+    @Suppress("VariableNaming")
+    val TAG: String
+}
 
-    fun d(
-        tag: String,
-        message: String,
-    ) {
-        if (logLevel <= LogLevel.DEBUG) {
-            Log.d(tag, message)
+inline fun LogTagProvider.error(logMessage: () -> String) {
+    if (isLoggingEnabled())
+        Log.e(TAG, logMessage.invoke())
+}
+
+inline fun LogTagProvider.error(error: Throwable?, logMessage: () -> String) {
+    if (isLoggingEnabled()) {
+        if (error == null) {
+            Log.e(TAG, logMessage.invoke())
+        } else {
+            Log.e(TAG, logMessage.invoke(), error)
         }
     }
+}
 
-    fun i(
-        tag: String,
-        message: String,
-    ) {
-        if (logLevel <= LogLevel.INFO) {
-            Log.i(tag, message)
-        }
-    }
+inline fun LogTagProvider.info(logMessage: () -> String) {
+    if (isLoggingEnabled())
+        Log.i(TAG, logMessage.invoke())
+}
 
-    fun w(
-        tag: String,
-        message: String,
-    ) {
-        if (logLevel <= LogLevel.WARN) {
-            Log.w(tag, message)
-        }
-    }
+inline fun LogTagProvider.verbose(logMessage: () -> String) {
+    if (isLoggingEnabled())
+        Log.v(TAG, logMessage.invoke())
+}
 
-    fun e(
-        tag: String,
-        message: String,
-    ) {
-        if (logLevel <= LogLevel.ERROR) {
-            Log.e(tag, message)
-        }
-    }
+inline fun LogTagProvider.warn(logMessage: () -> String) {
+    if (isLoggingEnabled())
+        Log.w(TAG, logMessage.invoke())
+}
 
-    fun e(
-        tag: String,
-        message: String,
-        throwable: Throwable,
-    ) {
-        if (logLevel <= LogLevel.ERROR) {
-            Log.e(tag, message, throwable)
-        }
-    }
+
+inline fun LogTagProvider.debug(logMessage: () -> String) {
+    if (isLoggingEnabled())
+        Log.d(TAG, logMessage.invoke())
+}
+
+
+inline fun LogTagProvider.wtf(logMessage: () -> String) {
+    if (isLoggingEnabled())
+        Log.wtf(TAG, logMessage.invoke())
+}
+
+fun isLoggingEnabled(): Boolean {
+    return Insightoid.isLoggingEnabled()
 }

@@ -16,7 +16,7 @@ class EventTracker(private val apiClient: ApiClient) : CoroutineScope {
 
     private val events = mutableListOf<Event>()
     private var batchLimit = 10
-    private val flushIntervalMillis = 60_000L // e.g., 60 seconds
+    private val flushIntervalMillis = 60_000L
 
     init {
         startPeriodicFlush()

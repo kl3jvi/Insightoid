@@ -4,7 +4,9 @@ import android.content.Context
 import com.kl3jvi.insightoid_api.network.ApiClient
 import com.kl3jvi.insightoid_api.network.NetworkUtils
 import com.kl3jvi.insightoid_api.storage.LocalStorage
-import com.kl3jvi.insightoid_api.utils.Logger
+import com.kl3jvi.insightoid_api.utils.LogTagProvider
+import com.kl3jvi.insightoid_api.utils.debug
+import com.kl3jvi.insightoid_api.utils.error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,14 +18,16 @@ import java.io.StringWriter
 
 internal class ExceptionHandler(
     private val context: Context,
-) : Thread.UncaughtExceptionHandler, KoinComponent {
+) : Thread.UncaughtExceptionHandler, KoinComponent, LogTagProvider {
+    override val TAG: String = "ExceptionHandler"
+
     private val localStorage: LocalStorage by inject()
     private val apiClient: ApiClient by inject()
+
     private val scope = CoroutineScope(Dispatchers.IO)
-    private val errorHandler =
-        CoroutineExceptionHandler { _, throwable ->
-            Logger.e("Error while sending crash data:", "${throwable.message}")
-        }
+    private val errorHandler = CoroutineExceptionHandler { _, throwable ->
+        error(throwable) { "Error while sending crash data to server" }
+    }
 
     private val defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
 
@@ -36,11 +40,18 @@ internal class ExceptionHandler(
             localStorage.storeCrashData(crashData)
             if (NetworkUtils.isNetworkAvailable(context)) {
                 scope.launch(Dispatchers.IO + errorHandler) {
-                    apiClient.sendCrashData(crashData)
+                    debug { "Sending crash data to server" }
+                    val result = apiClient.sendCrashData(crashData)
+                    if (result.isSuccessful) {
+                        debug { "Crash data sent successfully" }
+                        localStorage.removeCrashData(crashData.threadId)
+                    } else {
+                        error { "Error while sending crash data to server" }
+                    }
                 }
             }
         } catch (e: Exception) {
-            Logger.e("Error while handling uncaught exception:", "${e.message}")
+            error(e) { "Error while handling uncaught exception" }
         } finally {
             defaultExceptionHandler?.uncaughtException(thread, exception)
         }
@@ -62,4 +73,5 @@ internal class ExceptionHandler(
             stackTrace = stackTrace,
         )
     }
+
 }

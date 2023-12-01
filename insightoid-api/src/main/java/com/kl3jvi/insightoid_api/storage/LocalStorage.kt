@@ -8,7 +8,6 @@ class LocalStorage(
     private val sharedPreferences: SharedPreferences
 ) {
     private val gson = Gson()
-
     fun storeCrashData(crashData: CrashData) {
         val crashDataJson = gson.toJson(crashData)
         val editor = sharedPreferences.edit()

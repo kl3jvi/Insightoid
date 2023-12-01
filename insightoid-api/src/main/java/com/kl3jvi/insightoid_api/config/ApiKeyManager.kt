@@ -1,10 +1,12 @@
 package com.kl3jvi.insightoid_api.config
 
 import android.content.SharedPreferences
+import com.kl3jvi.insightoid_api.sdk.Insightoid
 
 
 class ApiKeyManager(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val insightoidInstance: Insightoid
 ) {
     companion object {
         private const val API_KEY_PREF = "com.insightoid.sdk.api_key"

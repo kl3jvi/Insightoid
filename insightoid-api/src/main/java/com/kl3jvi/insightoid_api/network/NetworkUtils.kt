@@ -1,5 +1,6 @@
 package com.kl3jvi.insightoid_api.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -10,6 +11,7 @@ class NetworkUtils {
         @Volatile
         private var isNetworkConnected = false
 
+        @SuppressLint("MissingPermission", "NewApi")
         fun isNetworkAvailable(context: Context): Boolean {
             val connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

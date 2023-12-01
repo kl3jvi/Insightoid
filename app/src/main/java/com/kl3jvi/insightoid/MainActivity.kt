@@ -19,7 +19,12 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Insightoid.initialize(this)
+        Insightoid.Builder()
+            .withContext(this)
+            .setApiKey("1sdascsa-xa21Asc-1sda1sda-1sda1sda")
+            .setEnableCrashReporting(true)
+            .setEnableLogging(true)
+            .initialize()
 
         // launch a coroutine and wait for three seconds then throw a runtime error
         // this will be caught by the exception handler
@@ -28,10 +33,6 @@ class MainActivity : ComponentActivity() {
             delay(3000)
 //            throw RuntimeException("Test Crash")
         }
-
-        val a = 1
-        println(1 / 0)
-
         setContent {
             InsightoidTheme {
                 // A surface container using the 'background' color from the theme
