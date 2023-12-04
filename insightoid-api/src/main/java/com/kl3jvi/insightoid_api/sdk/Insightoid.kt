@@ -6,12 +6,15 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.kl3jvi.insightoid_api.crashreporting.CrashReporter
+//import com.kl3jvi.insightoid_api.crashreporting.CrashReporter
 import com.kl3jvi.insightoid_api.crashreporting.ExceptionHandler
+import com.kl3jvi.insightoid_api.di.listOfModules
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
+import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
 
 object Insightoid {
-    private val koinApplication = KoinApplication.init()
     private var apiKey: String? = null
     private var enableCrashReporting: Boolean = false
     private var enableLogging: Boolean = false
@@ -60,16 +63,19 @@ object Insightoid {
         fun initialize() {
             requireNotNull(context) { "Context must be set" }
             require(apiKey.isNotEmpty()) { "API key must be set" }
-
-            context?.let {
-                Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(it))
-                koinApplication.modules(listOf())
-                initializeSendCrashData(it)
+            startKoin {
+                androidContext(context!!)
+                modules(listOfModules)
             }
 
             Insightoid.apiKey = this.apiKey
             Insightoid.enableCrashReporting = this.enableCrashReporting
             Insightoid.enableLogging = this.enableLogging
+
+            context?.let {
+                Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(it))
+                initializeSendCrashData(it)
+            }
         }
 
 

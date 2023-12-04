@@ -7,5 +7,5 @@ class ApiClient(
     private val apiService: ApiService,
 ) {
     suspend fun sendCrashData(crashData: CrashData) = apiService.sendCrashData(crashData)
-    suspend fun sendEvents(eventList: List<Event>) = apiService.sendEvents(eventList)
+    suspend fun sendEvents(eventList: List<Event>) = Unit
 }

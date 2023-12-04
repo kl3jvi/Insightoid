@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.retrofit)
     implementation(libs.arrow.core)
-    // gson
     implementation(libs.gson)
+    implementation(libs.converter.gson)
     implementation(libs.androidx.work.runtime.ktx)
 }

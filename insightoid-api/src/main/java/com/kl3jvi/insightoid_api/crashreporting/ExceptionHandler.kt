@@ -16,7 +16,7 @@ import org.koin.core.component.inject
 import java.io.PrintWriter
 import java.io.StringWriter
 
-internal class ExceptionHandler(
+class ExceptionHandler(
     private val context: Context,
 ) : Thread.UncaughtExceptionHandler, KoinComponent, LogTagProvider {
     override val TAG: String = "ExceptionHandler"
@@ -69,7 +69,7 @@ internal class ExceptionHandler(
             threadName = thread.name,
             threadId = thread.id,
             exceptionName = exception.javaClass.name,
-            exceptionMessage = exception.message,
+            exceptionMessage = exception.message.orEmpty(),
             stackTrace = stackTrace,
         )
     }
