@@ -2,7 +2,7 @@ package com.kl3jvi.insightoid_api.crashreporting
 
 import android.content.Context
 import com.kl3jvi.insightoid_api.network.ApiClient
-import com.kl3jvi.insightoid_api.network.NetworkUtils
+import com.kl3jvi.insightoid_api.utils.NetworkUtils
 import com.kl3jvi.insightoid_api.storage.LocalStorage
 import com.kl3jvi.insightoid_api.utils.LogTagProvider
 import com.kl3jvi.insightoid_api.utils.debug

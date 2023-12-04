@@ -5,7 +5,10 @@ plugins {
 
 android {
     namespace = "com.kl3jvi.insightoid_api"
-    compileSdk = 31
+    compileSdk = 34
+    defaultConfig{
+        minSdk = 21
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
