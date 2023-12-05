@@ -1,7 +1,8 @@
 package com.kl3jvi.insightoid_api.utils
 
 import android.util.Log
-import com.kl3jvi.insightoid_api.sdk.Insightoid
+import com.kl3jvi.insightoid_api.config.InsightoidConfig
+import org.koin.java.KoinJavaComponent.inject
 
 
 @Suppress("PropertyName")
@@ -11,8 +12,7 @@ interface LogTagProvider {
 }
 
 inline fun LogTagProvider.error(logMessage: () -> String) {
-    if (isLoggingEnabled())
-        Log.e(TAG, logMessage.invoke())
+    if (isLoggingEnabled()) Log.e(TAG, logMessage.invoke())
 }
 
 inline fun LogTagProvider.error(error: Throwable?, logMessage: () -> String) {
@@ -26,32 +26,28 @@ inline fun LogTagProvider.error(error: Throwable?, logMessage: () -> String) {
 }
 
 inline fun LogTagProvider.info(logMessage: () -> String) {
-    if (isLoggingEnabled())
-        Log.i(TAG, logMessage.invoke())
+    if (isLoggingEnabled()) Log.i(TAG, logMessage.invoke())
 }
 
 inline fun LogTagProvider.verbose(logMessage: () -> String) {
-    if (isLoggingEnabled())
-        Log.v(TAG, logMessage.invoke())
+    if (isLoggingEnabled()) Log.v(TAG, logMessage.invoke())
 }
 
 inline fun LogTagProvider.warn(logMessage: () -> String) {
-    if (isLoggingEnabled())
-        Log.w(TAG, logMessage.invoke())
+    if (isLoggingEnabled()) Log.w(TAG, logMessage.invoke())
 }
 
 
 inline fun LogTagProvider.debug(logMessage: () -> String) {
-    if (isLoggingEnabled())
-        Log.d(TAG, logMessage.invoke())
+    if (isLoggingEnabled()) Log.d(TAG, logMessage.invoke())
 }
 
 
 inline fun LogTagProvider.wtf(logMessage: () -> String) {
-    if (isLoggingEnabled())
-        Log.wtf(TAG, logMessage.invoke())
+    if (isLoggingEnabled()) Log.wtf(TAG, logMessage.invoke())
 }
 
 fun isLoggingEnabled(): Boolean {
-    return Insightoid.isLoggingEnabled()
+    val config: InsightoidConfig by inject(InsightoidConfig::class.java)
+    return config.enableLogging
 }

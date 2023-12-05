@@ -1,10 +1,11 @@
 package com.kl3jvi.insightoid_api.crashreporting
 
 import android.content.Context
+import com.kl3jvi.insightoid_api.config.InsightoidConfig
 import com.kl3jvi.insightoid_api.network.ApiClient
-import com.kl3jvi.insightoid_api.utils.NetworkUtils
 import com.kl3jvi.insightoid_api.storage.LocalStorage
 import com.kl3jvi.insightoid_api.utils.LogTagProvider
+import com.kl3jvi.insightoid_api.utils.NetworkUtils
 import com.kl3jvi.insightoid_api.utils.debug
 import com.kl3jvi.insightoid_api.utils.error
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -23,6 +24,7 @@ class ExceptionHandler(
 
     private val localStorage: LocalStorage by inject()
     private val apiClient: ApiClient by inject()
+    private val config: InsightoidConfig by inject()
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val errorHandler = CoroutineExceptionHandler { _, throwable ->
@@ -38,7 +40,7 @@ class ExceptionHandler(
         try {
             val crashData = collectCrashData(thread, exception)
             localStorage.storeCrashData(crashData)
-            if (NetworkUtils.isNetworkAvailable(context)) {
+            if (NetworkUtils.isNetworkAvailable(context) && config.enableCrashReporting) {
                 scope.launch(Dispatchers.IO + errorHandler) {
                     debug { "Sending crash data to server" }
                     val result = apiClient.sendCrashData(crashData)
@@ -71,6 +73,7 @@ class ExceptionHandler(
             exceptionName = exception.javaClass.name,
             exceptionMessage = exception.message.orEmpty(),
             stackTrace = stackTrace,
+            uniqueIdentifier = localStorage.getUserId()
         )
     }
 

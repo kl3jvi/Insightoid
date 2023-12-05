@@ -1,8 +1,8 @@
 package com.kl3jvi.insightoid_api.di
 
+import com.kl3jvi.insightoid_api.config.InsightoidConfig
 import com.kl3jvi.insightoid_api.network.ApiClient
 import com.kl3jvi.insightoid_api.network.ApiService
-import com.kl3jvi.insightoid_api.sdk.Insightoid
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -13,7 +13,7 @@ val networkModule = module {
         OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("projectId", "${Insightoid.getApiKey()}")
+                    .addHeader("projectId", get<InsightoidConfig>().apiKey)
                     .build()
                 chain.proceed(request)
             }
@@ -22,7 +22,7 @@ val networkModule = module {
 
     single<ApiService> {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.2:8080/api/") // localhost:8080
+            .baseUrl("http://10.0.2.2:8080/api/") // localhost:8080
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

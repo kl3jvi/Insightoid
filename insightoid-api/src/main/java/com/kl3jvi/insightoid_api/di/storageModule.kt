@@ -7,7 +7,6 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val storageModule = module {
-    // shared preferences
     single<SharedPreferences> {
         androidApplication().getSharedPreferences(
             "Insightoid_Preferences",

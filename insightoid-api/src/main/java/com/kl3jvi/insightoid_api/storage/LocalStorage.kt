@@ -3,6 +3,7 @@ package com.kl3jvi.insightoid_api.storage
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.kl3jvi.insightoid_api.crashreporting.CrashData
+import java.util.UUID
 
 class LocalStorage(
     private val sharedPreferences: SharedPreferences
@@ -28,5 +29,20 @@ class LocalStorage(
         val editor = sharedPreferences.edit()
         editor.remove(threadId.toString())
         editor.apply()
+    }
+
+    fun clear() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
+
+    fun getUserId(): String {
+        var userId = sharedPreferences.getString("user_id", null)
+        if (userId == null) {
+            userId = UUID.randomUUID().toString()
+            sharedPreferences.edit().putString("user_id", userId).apply()
+        }
+        return userId
     }
 }

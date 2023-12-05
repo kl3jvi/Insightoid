@@ -3,7 +3,7 @@ package com.kl3jvi.insightoid
 import android.app.Application
 import com.kl3jvi.insightoid_api.sdk.Insightoid
 
-class InsightoidApplication: Application(){
+class InsightoidApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Insightoid.Builder()

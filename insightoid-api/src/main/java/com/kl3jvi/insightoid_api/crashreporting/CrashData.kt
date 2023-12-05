@@ -7,4 +7,5 @@ data class CrashData(
     val exceptionName: String,
     val exceptionMessage: String = "No message provided",
     val stackTrace: String,
+    val uniqueIdentifier: String,
 )

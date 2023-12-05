@@ -6,6 +6,7 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.kl3jvi.insightoid_api.config.InsightoidConfig
 import com.kl3jvi.insightoid_api.crashreporting.CrashReporter
 import com.kl3jvi.insightoid_api.crashreporting.ExceptionHandler
 import com.kl3jvi.insightoid_api.di.listOfModules
@@ -13,29 +14,17 @@ import com.kl3jvi.insightoid_api.utils.LogTagProvider
 import com.kl3jvi.insightoid_api.utils.info
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
 object Insightoid : LogTagProvider {
-    private var apiKey: String? = null
-    private var enableCrashReporting: Boolean = false
-    private var enableLogging: Boolean = false
     override val TAG: String = "Insightoid"
-
-    fun getApiKey(): String? {
-        requireNotNull(apiKey) { "Insightoid not initialized. Call Insightoid.Builder().initialize() first." }
-        return apiKey
-    }
-
-    fun isLoggingEnabled(): Boolean {
-        requireNotNull(apiKey) { "Insightoid not initialized. Call Insightoid.Builder().initialize() first." }
-        return enableLogging
-    }
-
-    class Builder {
+    class Builder : LogTagProvider {
         private var context: Context? = null
         private var apiKey: String = ""
         private var enableCrashReporting: Boolean = false
         private var enableLogging: Boolean = false
+        override val TAG: String get() = "Insightoid"
 
         fun withContext(context: Context): Builder {
             this.context = context
@@ -64,19 +53,20 @@ object Insightoid : LogTagProvider {
         fun initialize() {
             requireNotNull(context) { "Context must be set" }
             require(apiKey.isNotEmpty()) { "API key must be set" }
+
+            val config = InsightoidConfig(apiKey, enableCrashReporting, enableLogging)
+
             startKoin {
                 androidContext(context!!)
-                modules(listOfModules)
+                modules(
+                    module {
+                        single { config }
+                    } + listOfModules
+                )
             }
 
-            Insightoid.apiKey = this.apiKey
-            Insightoid.enableCrashReporting = this.enableCrashReporting
-            Insightoid.enableLogging = this.enableLogging
-
-            context?.let {
-                Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(it))
-                initializeSendCrashData(it)
-            }
+            Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(context!!))
+            initializeSendCrashData(context!!)
         }
 
 
@@ -95,6 +85,7 @@ object Insightoid : LogTagProvider {
 
             WorkManager.getInstance(context).enqueue(sendCrashDataWorkRequest)
         }
+
     }
 
 }

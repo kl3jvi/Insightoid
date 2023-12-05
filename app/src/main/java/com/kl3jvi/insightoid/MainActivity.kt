@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         // and the crash data will be sent to the server
         lifecycleScope.launch {
             delay(7000)
-            throw RuntimeException("Test Crash")
+            1/0
         }
         setContent {
             InsightoidTheme {
@@ -39,6 +39,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+// emulator ip
+// 10.0.0.2
 
 @Composable
 fun Greeting(
