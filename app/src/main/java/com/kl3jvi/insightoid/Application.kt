@@ -8,7 +8,7 @@ class InsightoidApplication : Application() {
         super.onCreate()
         Insightoid.Builder()
             .withContext(this)
-            .setApiKey("696b7f50-7ec2-4f67-89dc-c6922a2a087d")
+            .setApiKey("ea4d90e3-c056-406e-ba5b-79aa92da95ba")
             .setEnableCrashReporting(true)
             .setEnableLogging(true)
             .initialize()

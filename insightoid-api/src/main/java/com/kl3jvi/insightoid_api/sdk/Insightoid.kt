@@ -28,25 +28,21 @@ object Insightoid : LogTagProvider {
 
         fun withContext(context: Context): Builder {
             this.context = context
-            info { "Context set" }
             return this
         }
 
         fun setApiKey(apiKey: String): Builder {
             this.apiKey = apiKey
-            info { "API key set" }
             return this
         }
 
         fun setEnableCrashReporting(enable: Boolean): Builder {
             this.enableCrashReporting = enable
-            info { "Crash reporting enabled" }
             return this
         }
 
         fun setEnableLogging(enable: Boolean): Builder {
             this.enableLogging = enable
-            info { "Logging enabled" }
             return this
         }
 

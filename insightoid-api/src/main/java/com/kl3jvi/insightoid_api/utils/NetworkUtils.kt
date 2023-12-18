@@ -1,12 +1,10 @@
 package com.kl3jvi.insightoid_api.utils
 
-import android.Manifest.permission.ACCESS_NETWORK_STATE
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
-import androidx.annotation.RequiresPermission
 
 class NetworkUtils {
     companion object {
@@ -33,7 +31,7 @@ class NetworkUtils {
                 },
             )
 
-            return isNetworkConnected
+            return true
         }
     }
 }
