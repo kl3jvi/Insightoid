@@ -1,12 +1,16 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id("org.jetbrains.kotlin.android")
     id("com.android.library")
+    id("com.vanniktech.maven.publish") version "0.25.3"
 }
+
 
 android {
     namespace = "com.kl3jvi.insightoid_api"
     compileSdk = 34
-    defaultConfig{
+    defaultConfig {
         minSdk = 21
     }
 
