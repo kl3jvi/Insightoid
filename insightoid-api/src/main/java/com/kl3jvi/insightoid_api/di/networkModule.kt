@@ -22,7 +22,7 @@ val networkModule = module {
 
     single<ApiService> {
         Retrofit.Builder()
-            .baseUrl("https://insightoid-backend-old-glitter-327.fly.dev/api/") // localhost:8080
+            .baseUrl("https://insightoid-backend.fly.dev/api/")
             .client(get<OkHttpClient>())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
